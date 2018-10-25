@@ -124,7 +124,7 @@ def compute_stoch_gradient_ridge(y,tx,w,lambda_):
     if len(y)>1:
         dL=-tx.transpose().dot(err)/tx.shape[0]+2*lambda_*w
     else:
-        dL=-tx.reshape(-1,1)*err+2*lambda_*w
+        dL=-tx.reshape(-1,)*err+2*lambda_*w.reshape(-1,)
     return dL
 
 def ridge_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
@@ -147,7 +147,7 @@ def compute_stoch_gradient_lasso(y,tx,w,lambda_):
     if len(y)>1:
         dL=-tx.transpose().dot(err)/tx.shape[0]+lambda_*sign(w)
     else:
-        dL=-tx.reshape(-1,1)*err+lambda_*sign(w)
+        dL=-tx.reshape(-1,)*err+lambda_*sign(w).reshape(-1,)
     return dL
 
 def lasso_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
