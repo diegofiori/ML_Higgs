@@ -67,17 +67,13 @@ def compute_stoch_gradient_mse(y, tx, w):
 def least_squares_SGD(
         y, tx, initial_w, batch_size, max_iters, gamma):
     """Stochastic gradient descent algorithm."""
-    ws=[initial_w]
-    losses=[]
     w=initial_w
     for n_iter in range(max_iters):
         for mini_y,mini_tx in batch_iter(y,tx,batch_size):
             g=compute_stoch_gradient_mse(mini_y,mini_tx,w)
-            loss=compute_loss(y,tx,w)
             w=w-gamma*g
-            ws.append(w)
-            losses.append(loss)
-    return losses[-1], ws[-1]
+    loss=compute_loss(y,tx,w)
+    return loss, w
 
 
 def least_squares(y, tx):
@@ -122,3 +118,44 @@ def split_data(x, y, ratio, seed=1):
     x_test=x[nb_train:y.shape[0]-1]
     
     return x_train,y_train,x_test,y_test
+
+def compute_stoch_gradient_ridge(y,tx,w,lambda_):
+    err=y-tx.dot(w)
+    if len(y)>1:
+        dL=-tx.transpose().dot(err)/tx.shape[0]+2*lambda_*w
+    else:
+        dL=-tx.reshape(-1,1)*err+2*lambda_*w
+    return dL
+
+def ridge_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
+    w=initial_w
+    for n_iter in range(max_iters):
+        for mini_y,mini_tx in batch_iter(y,tx,batch_size):
+            g=compute_stoch_gradient_ridge(mini_y,mini_tx,w,lambda_)
+            w=w-gamma*g
+    loss=np.linalg.norm(y-tx.dot(w))**2/(2*len(y))+lambda_*np.linalg.norm(w)**2
+    return loss, w
+
+def sign(x):
+    true_vec1=x[:]>0
+    true_vec2=x[:]<0
+    x=true_vec1-true_vec2
+    return x
+
+def compute_stoch_gradient_lasso(y,tx,w,lambda_):
+    err=y-tx.dot(w)
+    if len(y)>1:
+        dL=-tx.transpose().dot(err)/tx.shape[0]+lambda_*sign(w)
+    else:
+        dL=-tx.reshape(-1,1)*err+lambda_*sign(w)
+    return dL
+
+def lasso_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
+    w=initial_w
+    for n_iter in range(max_iters):
+        for mini_y,mini_x in batch_iter(y,tx,batch_size):
+            g=compute_stoch_gradient_lasso(y,tx,w,lambda_)
+            w=w-gamma*g
+    loss=np.linalg.norm(y-tx.dot(w))**2/(2*tx.shape[0])+lambda_*np.absolute(w).sum()
+    return loss,w
+
