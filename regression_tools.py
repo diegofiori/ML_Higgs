@@ -171,6 +171,7 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     Do one step of gradient descen using logistic regression.
     Return the loss and the updated w.
     """
+    y = y.reshape(tx.shape[0],1)
     # compute the cost
     loss=calculate_loss_logistic(y, tx, w)
     # compute the gradient
@@ -178,12 +179,26 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     # update w
     w=w-gamma*grad
     return loss, w
+
+def learning_by_stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma):
+    """
+    Do one step of gradient descen using logistic regression.
+    Return the loss and the updated w.
+    """
+    w=initial_w
+    for n_iter in range(max_iters):
+        for mini_y,mini_x in batch_iter(y,tx,batch_size):
+            g=np.transpose(mini_x)*sigmoid(np.dot(mini_x.,w)-mini_y)
+            w=w-gamma*g
+    loss=calculate_loss_logistic(y, tx, w)
+    return loss, w
               
 def learning_by_newton_method(y, tx, w, gamma):
     """
     Do one step on Newton's method.
     return the loss and updated w.
     """
+    y = y.reshape(tx.shape[0],1)
     # compute loss
     loss=calculate_loss_logistic(y, tx, w)
     # compute gradient
@@ -202,6 +217,7 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     Do one step of gradient descent, using the penalized logistic regression.
     Return the loss and updated w.
     """
+    y = y.reshape(tx.shape[0],1)
     # return loss, gradient: TODO
     loss=calculate_loss_logistic(y, tx, w)+0.5*lambda_*linalg.norm(w)**2
     grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)+lambda_*w
