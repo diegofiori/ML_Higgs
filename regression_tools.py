@@ -116,7 +116,6 @@ def split_data(x, y, ratio, seed=1):
     x_train=x[:nb_train-1]
     y_test=y[nb_train:y.shape[0]-1]
     x_test=x[nb_train:y.shape[0]-1]
-    
     return x_train,y_train,x_test,y_test
 
 def compute_stoch_gradient_ridge(y,tx,w,lambda_):
@@ -159,3 +158,67 @@ def lasso_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma
     loss=np.linalg.norm(y-tx.dot(w))**2/(2*tx.shape[0])+lambda_*np.absolute(w).sum()
     return loss,w
 
+def sigmoid(t):
+    """apply sigmoid function on t."""
+    return(np.exp(t)/(1+np.exp(t)))
+
+def calculate_loss_logistic(y, tx, w):
+    """compute the cost by negative log likelihood."""
+    return -sum(y*(np.dot(tx,w))-np.log(1+np.exp(np.dot(tx,w))))
+
+def learning_by_gradient_descent(y, tx, w, gamma):
+    """
+    Do one step of gradient descen using logistic regression.
+    Return the loss and the updated w.
+    """
+    # compute the cost
+    loss=calculate_loss_logistic(y, tx, w)
+    # compute the gradient
+    grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)
+    # update w
+    w=w-gamma*grad
+    return loss, w
+              
+def learning_by_newton_method(y, tx, w, gamma):
+    """
+    Do one step on Newton's method.
+    return the loss and updated w.
+    """
+    # compute loss
+    loss=calculate_loss_logistic(y, tx, w)
+    # compute gradient
+    grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)
+    # compute hessian
+    s1=sigmoid(np.dot(tx,w))
+    d=np.array(s1*(1-s1))
+    D=np.diag(d[:,0])
+    H=np.transpose(tx).dot(D.dot(tx))    
+    # update w
+    w=w-np.linalg.solve(H,gamma*grad)
+    return loss, w
+
+def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
+    """
+    Do one step of gradient descent, using the penalized logistic regression.
+    Return the loss and updated w.
+    """
+    # return loss, gradient: TODO
+    loss=calculate_loss_logistic(y, tx, w)+0.5*lambda_*linalg.norm(w)**2
+    grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)+lambda_*w
+        # compute hessian
+    s1=sigmoid(np.dot(tx,w))
+    d=np.array(s1*(1-s1))
+    D=np.diag(d[:,0])
+    H=np.transpose(tx).dot(D.dot(tx))    
+    # update w
+    w=w-np.linalg.solve(H,grad)
+    return loss, w
+              
+              
+              
+def AIC(w,l):
+    """
+    Return the Akaike Information Criterion of a model with parameters w and negative log likelihood l
+    """
+    return -2*w.shape[0]-2*l
+              
