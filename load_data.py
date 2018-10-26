@@ -1,3 +1,6 @@
+import numpy as np
+
+
 def load_data(train_path,test_path):
     """ 
     Load data

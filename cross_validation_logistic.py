@@ -30,7 +30,7 @@ def logistic_cross_validation(y, phi, k_indices, k, gamma, degree, nmc , interac
     tx_test = norm_data(tx_train, not_norm_features=nmc, skip_first_col=True)
     
     if logistic_type==0:
-        loss , w = logistic_regression_gradient_descent_demo(y_train, tx_train, gamma, max_iter, threshold):
+        loss , w = logistic_regression_gradient_descent_demo(y_train, tx_train, gamma, max_iter, threshold)
     elif logistic_type==1:
         logistic_regression_newton_method_demo(y_train, tx_train)
     elif logistic_type==2:

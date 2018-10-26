@@ -95,7 +95,7 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
     return cost_te
 
 
-def plot_cross_validation(lambdas,cost_te,degrees):
+def plot_cross_validation(lambdas,cost_te,degrees,regression_type):
     plt.figure
     string=[]
     for s in range(lambdas.size):
@@ -104,7 +104,7 @@ def plot_cross_validation(lambdas,cost_te,degrees):
     plt.xlabel('degree')
     plt.ylabel('train accuracy')
     plt.legend(string)
-    plt.show()
+    plt.savefig('cross_validation '+regression_type+'.png')
     
 def find_the_maximum(matrix):
     max_col=np.max(matrix,axis=0)
