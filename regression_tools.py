@@ -226,7 +226,7 @@ def learning_by_stochastic_gradient_descent(y, tx, initial_w, batch_size, max_it
     w=initial_w
     for n_iter in range(max_iters):
         for mini_y,mini_x in batch_iter(y,tx,batch_size):
-            g=np.transpose(mini_x)*sigmoid(np.dot(mini_x.,w)-mini_y)
+            g=np.transpose(mini_x)*sigmoid(np.dot(mini_x,w)-mini_y)
             w=w-gamma*g
     loss=calculate_loss_logistic(y, tx, w)
     return loss, w
