@@ -52,12 +52,16 @@ def build_polinomial(x,degree,not_poly_features=0,nm=-999,already_cleaned=True):
         phi=nan_converter(phi,nm=nm,direction=False)
     return phi
 
-def norm_data(x,not_norm_features=0):
-    x_to_norm=x[:,0:x.shape[1]-not_norm_features]
+def norm_data(x,not_norm_features=0,skip_first_col=False):
+    if skip_first_col:
+        beg=1
+    else:
+        beg=0
+    x_to_norm=x[:,beg:x.shape[1]-not_norm_features]
     means=np.mean(x_to_norm,axis=0)
     sds=np.std(x_to_norm,axis=0)
     x_to_norm=(x_to_norm-means.reshape(1,-1))/sds.reshape(1,-1)
-    x[:,0:x.shape[1]-not_norm_features]=x_to_norm
+    x[:,beg:x.shape[1]-not_norm_features]=x_to_norm
     return x
 
 def features_augmentation(relevant_columns,not_augm_features=0):
