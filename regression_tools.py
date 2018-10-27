@@ -242,10 +242,11 @@ def compare_aic_gradient_descent(y,tx,gamma,max_iter,threshold):
         loss.fill(np.inf)
         aic=np.zeros(dimx)  #contains aic for all models with m variables
         aic.fill(np.inf)
+        w=np.zeros(dimx)
         for m in variables:
             temp=models.copy()
             temp.append(m)
-            [loss[m],w]=logistic_regression_gradient_descent_demo(y, tx[:,temp], gamma, max_iter, threshold)
+                [loss[m],w]=logistic_regression_gradient_descent_demologistic_regression(y, tx[:,temp], initial_w, max_iter, gamma)
             aic[m] = AIC(w,loss[m])
 
         b=np.argmin(loss)
@@ -257,6 +258,20 @@ def compare_aic_gradient_descent(y,tx,gamma,max_iter,threshold):
     model_feature=models[:idx_loss+1]
     return model_feature
 
+def logistic_regression_newton_method_demo(y, tx, max_iter, threshold,gamma):
+    # init parameters
+    losses = []
+    w = np.zeros((tx.shape[1],1))
+    # start the logistic regression
+    
+    for iter in range(max_iter):
+        # get loss and update w.
+        loss, w = learning_by_newton_method_prova(y.reshape(-1,1), tx, w, gamma)
+        # converge criterion
+        losses.append(loss)
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
+            break
+    return loss,w
 
               
 def AIC(w,l):

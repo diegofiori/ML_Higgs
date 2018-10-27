@@ -92,3 +92,9 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
             break
     return w,loss
+
+def reg_logistic_regression(y, tx, lambda_,initial_w, max_iters, gamma):
+    
+    
+    
+    return w,loss
