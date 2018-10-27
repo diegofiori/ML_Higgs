@@ -1,5 +1,16 @@
 import numpy as np
 
+def retrieve_subset(y,x,num_obs, seed_set=1):
+
+    # Select randomly a subset
+    np.random.seed(seed_set)
+    tot_observation = x.shape[0]
+    idx = np.random.randint(tot_observation, size=num_obs)
+    x_small = x[idx,:]
+    y_small = y[idx]
+
+    return y_small , x_small
+
 def grid_search(y, tx, w0, w1):
     """
     Algorithm for grid search.
@@ -220,6 +231,33 @@ def create_csv_submission(ids, y_pred, name):
         writer.writeheader()
         for r1, r2 in zip(ids, y_pred):
             writer.writerow({'Id':int(r1),'Prediction':int(r2)})
+            
+def compare_aic_gradient_descent(y,tx,gamma,max_iter,threshold):
+    dimx=tx.shape[1]
+    aic_chosen=np.zeros(dimx) #contains best loss of model with m variables
+    models=[] #list of best models
+    variables=list(range(dimx)) #list of variables
+    for ind in range(dimx):
+        loss=np.zeros(dimx) #contains loss for all models with m variables
+        loss.fill(np.inf)
+        aic=np.zeros(dimx)  #contains aic for all models with m variables
+        aic.fill(np.inf)
+        for m in variables:
+            temp=models.copy()
+            temp.append(m)
+            [loss[m],w]=logistic_regression_gradient_descent_demo(y, tx[:,temp], gamma, max_iter, threshold)
+            aic[m] = AIC(w,loss[m])
+
+        b=np.argmin(loss)
+        models.append(b)
+        variables.remove(b)
+        aic_chosen[ind]=aic[b]
+
+    idx_loss=np.argmin(aic_chosen)
+    model_feature=models[:idx_loss+1]
+    return model_feature
+
+
               
 def AIC(w,l):
     """

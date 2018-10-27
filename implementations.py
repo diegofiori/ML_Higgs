@@ -1,5 +1,5 @@
 import numpy as np
-from regression_tools.py import *
+from regression_tools import *
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     """
