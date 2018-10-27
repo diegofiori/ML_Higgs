@@ -166,7 +166,7 @@ def sign(x):
     """
     true_vec1=x[:]>0
     true_vec2=x[:]<0
-    x=true_vec1-true_vec2
+    x=1*true_vec1-1*true_vec2
     return x
 
 def compute_stoch_gradient_lasso(y,tx,w,lambda_):
