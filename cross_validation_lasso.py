@@ -46,5 +46,5 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed,key):
                 result = cross_validation_lasso(y_train, phi_train, k_indices, k , lambda_, nmc_tr+1+noaf)
                 loss_te[k]= result
 
-            cost_te[ind_lamb,ind_deg]=loss_te.mean()
+            cost_te[ind_lamb]=loss_te.mean()
     return cost_te
