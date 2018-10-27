@@ -296,6 +296,34 @@ def logistic_regression_gradient_descent_demo(y, tx, gamma, max_iter, threshold)
             break
     return loss,w
 
+def logistic_regression_newton_method_demo(y, tx, gamma, max_iter, threshold):
+    losses = []
+    w = np.zeros((tx.shape[1],1))
+    # start the logistic regression
+    for iter in range(max_iter):
+        # get loss and update w.
+        loss, w = learning_by_newton_method(y.reshape(-1,1), tx, w, gamma)
+        # converge criterion
+        losses.append(loss)
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
+            break
+    return loss,w
+
+def logistic_regression_penalized_gradient_descent_demo(y, tx, gamma, lambda_, max_iter, threshold):
+    # init parameters
+    losses = []
+    w = np.zeros((tx.shape[1], 1))
+    # start the logistic regression
+    for iter in range(max_iter):
+        # get loss and update w.
+        loss, w = learning_by_penalized_gradient(y.reshape(-1,1), tx, w, gamma, lambda_)
+        # converge criterion
+        losses.append(loss)
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
+            break
+            
+    return loss,w
+
 def create_csv_submission(ids, y_pred, name):
     """
     Creates an output file in csv format for submission to kaggle
