@@ -40,9 +40,9 @@ def cross_validation_ridge(y, phi, k_indices, k, lambda_, degree, not_poly_featu
     # Ridge regression / Linear regression
     #if tx_train.shape[1]<50:
     if lambda_!=0:
-        loss , w = ridge_regression(y_train, tx_train, lambda_)
+        w, loss = ridge_regression(y_train, tx_train, lambda_)
     else:
-        loss , w = least_squares(y_train,tx_train)
+        w, loss = least_squares(y_train,tx_train)
             
     #else: 
         # forse è meglio implementarle all'esterno della funzione

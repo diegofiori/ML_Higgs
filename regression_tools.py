@@ -1,16 +1,5 @@
 import numpy as np
 
-def retrieve_subset(y,x,num_obs, seed_set=1):
-    
-    # Select randomly a subset
-    np.random.seed(seed_set)
-    tot_observation = x.shape[0]
-    idx = np.random.randint(tot_observation, size=num_obs)
-    x_small = x[idx,:]
-    y_small = y[idx]
-    
-    return y_small , x_small
-
 def grid_search(y, tx, w0, w1):
     """
     Algorithm for grid search.
@@ -29,24 +18,6 @@ def compute_gradient_mse(y, tx, w):
     err=y-tx.dot(w)
     d_L=-tx.transpose().dot(err)/tx.shape[0]
     return d_L
-
-def least_squares_GD(y, tx, initial_w, max_iters, gamma):
-    """
-    Gradient descent algorithm.
-    """
-    ws = [initial_w]
-    losses = []
-    w = initial_w
-    for n_iter in range(max_iters):
-        d_L=compute_gradient_mse(y,tx,w)
-        loss=compute_loss(y,tx,w)
-        w=w-gamma*d_L
-        ws.append(w)
-        losses.append(loss)
-        print("Gradient Descent({bi}/{ti}): loss={l}, w0={w0}, w1={w1}".format(
-              bi=n_iter, ti=max_iters - 1, l=loss, w0=w[0], w1=w[1]))
-
-    return losses[-1], ws[-1]
 
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     """
@@ -72,8 +43,7 @@ def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
         end_index = min((batch_num + 1) * batch_size, data_size)
         if start_index != end_index:
             yield shuffled_y[start_index:end_index], shuffled_tx[start_index:end_index]
-
-
+            
 
 def compute_stoch_gradient_mse(y, tx, w):
     """
@@ -83,33 +53,13 @@ def compute_stoch_gradient_mse(y, tx, w):
     dL=-tx.transpose().dot(err)/tx.shape[0]
     return dL
 
-def least_squares_SGD(y, tx, initial_w, batch_size, max_iters, gamma):
-    """
-    Stochastic gradient descent algorithm.
-    """
-    w=initial_w
-    for n_iter in range(max_iters):
-        for mini_y,mini_tx in batch_iter(y,tx,batch_size):
-            g=compute_stoch_gradient_mse(mini_y,mini_tx,w)
-            w=w-gamma*g
-    loss=compute_loss(y,tx,w)
-    return loss, w
-
-
-def least_squares(y, tx):
-    """
-    Calculate the least squares.
-    """
-    w=np.linalg.solve(np.matmul(tx.transpose(),tx),tx.transpose().dot(y))
-    mse=compute_loss(y,tx,w)
-    return mse,w
 
 def compute_loss(y,tx,w):
     """
     Compute the MSE loss.
     """
-    L=np.linalg.norm(y-tx.dot(w))**2/(2*y.shape[0])
-    return L
+    loss=np.linalg.norm(y-tx.dot(w))**2/(2*y.shape[0])
+    return loss
 
 def build_poly(x, degree):
     """
@@ -121,17 +71,6 @@ def build_poly(x, degree):
     phi=np.array(phi_list).transpose()
     return phi
 
-def ridge_regression(y, tx, lambda_):
-    """
-    Implement ridge regression.
-    """
-    n=len(y)
-    I=np.diag(np.ones(tx.shape[1]))
-    A=np.matmul(tx.transpose(),tx)+2*n*lambda_*I
-    b=tx.transpose().dot(y)
-    w=np.linalg.solve(A,b)
-    L=np.linalg.norm(y-tx.dot(w))**2/tx.shape[0]/2+lambda_*(np.linalg.norm(w)**2)
-    return L,w
 
 def split_data(x, y, ratio, seed=1):
     """
@@ -159,17 +98,6 @@ def compute_stoch_gradient_ridge(y,tx,w,lambda_):
         dL=-tx.reshape(-1,1)*err+2*lambda_*w
     return dL
 
-def ridge_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
-    """
-    Returns the model of a ridge regression found with stochastic gradient descent.
-    """
-    w=initial_w
-    for n_iter in range(max_iters):
-        for mini_y,mini_tx in batch_iter(y,tx,batch_size):
-            g=compute_stoch_gradient_ridge(mini_y,mini_tx,w,lambda_)
-            w=w-gamma*g
-    loss=np.linalg.norm(y-tx.dot(w))**2/(2*len(y))+lambda_*np.linalg.norm(w)**2
-    return loss, w
 
 def sign(x):
     """
@@ -191,17 +119,6 @@ def compute_stoch_gradient_lasso(y,tx,w,lambda_):
         dL=-tx.reshape(-1,1)*err+lambda_*sign(w)
     return dL
 
-def lasso_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
-    """
-    Returns the model of a lasso regression found with stochastic gradient descent.
-    """
-    w=initial_w
-    for n_iter in range(max_iters):
-        for mini_y,mini_x in batch_iter(y,tx,batch_size):
-            g=compute_stoch_gradient_lasso(y,tx,w,lambda_)
-            w=w-gamma*g
-    loss=np.linalg.norm(y-tx.dot(w))**2/(2*tx.shape[0])+lambda_*np.absolute(w).sum()
-    return loss,w
 
 def sigmoid(t):
     """
@@ -227,7 +144,7 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)
     # update w
     w=w-gamma*grad
-    return loss, w
+    return loss,w
 
 def learning_by_stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma):
     """
@@ -290,51 +207,6 @@ def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
     return loss, w
 
 
-def logistic_regression_gradient_descent_demo(y, tx, gamma, max_iter, threshold):
-    """
-    Returns a model estimated by logistic regression using logistic regression.
-    """
-    # init parameters
-    losses = []
-    w = np.zeros((tx.shape[1],1))
-    # start the logistic regression
-    for iter in range(max_iter):
-        # get loss and update w.
-        loss, w = learning_by_gradient_descent(y.reshape(-1,1), tx, w, gamma)
-        # converge criterion
-        losses.append(loss)
-        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
-            break
-    return loss,w
-
-def logistic_regression_newton_method_demo(y, tx, gamma, max_iter, threshold):
-    losses = []
-    w = np.zeros((tx.shape[1],1))
-    # start the logistic regression
-    for iter in range(max_iter):
-        # get loss and update w.
-        loss, w = learning_by_newton_method(y.reshape(-1,1), tx, w, gamma)
-        # converge criterion
-        losses.append(loss)
-        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
-            break
-    return loss,w
-
-def logistic_regression_penalized_gradient_descent_demo(y, tx, gamma, lambda_, max_iter, threshold):
-    # init parameters
-    losses = []
-    w = np.zeros((tx.shape[1], 1))
-    # start the logistic regression
-    for iter in range(max_iter):
-        # get loss and update w.
-        loss, w = learning_by_penalized_gradient(y.reshape(-1,1), tx, w, gamma, lambda_)
-        # converge criterion
-        losses.append(loss)
-        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
-            break
-            
-    return loss,w
-
 def create_csv_submission(ids, y_pred, name):
     """
     Creates an output file in csv format for submission to kaggle
@@ -348,34 +220,7 @@ def create_csv_submission(ids, y_pred, name):
         writer.writeheader()
         for r1, r2 in zip(ids, y_pred):
             writer.writerow({'Id':int(r1),'Prediction':int(r2)})
-            
-            
-def compare_aic_gradient_descent(y,tx,gamma,max_iter,threshold):
-    dimx=tx.shape[1]
-    aic_chosen=np.zeros(dimx) #contains best loss of model with m variables
-    models=[] #list of best models
-    variables=list(range(dimx)) #list of variables
-    for ind in range(dimx):
-        loss=np.zeros(dimx) #contains loss for all models with m variables
-        loss.fill(np.inf)
-        aic=np.zeros(dimx)  #contains aic for all models with m variables
-        aic.fill(np.inf)
-        for m in variables:
-            temp=models.copy()
-            temp.append(m)
-            [loss[m],w]=logistic_regression_gradient_descent_demo(y, tx[:,temp], gamma, max_iter, threshold)
-            aic[m] = AIC(w,loss[m])
-        
-        b=np.argmin(loss)
-        models.append(b)
-        variables.remove(b)
-        aic_chosen[ind]=aic[b]      
-    
-    idx_loss=np.argmin(aic_chosen)
-    model_feature=models[:idx_loss+1]
-    return model_feature            
-                
-                
+              
 def AIC(w,l):
     """
     Return the Akaike Information Criterion of a model with parameters w and negative log likelihood l

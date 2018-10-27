@@ -3,6 +3,18 @@ import matplotlib.pyplot as plt
 from regression_tools import * 
 from preprocessing import *
 
+def build_k_indices(y, k_fold, seed):
+    """
+    Build k indices for k-fold cross-validation.
+    """
+    num_row = y.shape[0]
+    interval = int(num_row / k_fold)
+    np.random.seed(seed)
+    indices = np.random.permutation(num_row)
+    k_indices = [indices[k * interval: (k + 1) * interval]
+                 for k in range(k_fold)]
+    return np.array(k_indices)
+
 def cross_validation_lasso(y, phi, k_indices, k, lambda_, not_poly_features):
     """
     Computes one step of cross validation with lasso regression and returns the fraction of correct classifications.
@@ -16,14 +28,14 @@ def cross_validation_lasso(y, phi, k_indices, k, lambda_, not_poly_features):
     #print(tx_test.shape)
     #print(tx_train.shape)
     #print(y_train.shape)
-    loss , w = lasso_regression_SGD(y_train,tx_train, lambda_)
+    w, loss = lasso_regression_SGD(y_train, x_train, lambda_, np.zeros(x_train.shape[1]), 1, 100, gamma=1e-7)
     # Calculate results
-    result=(y_test==(tx_test.dot(w)>0.5)).sum()/y_test.shape[0]
+    result=(y_test==(x_test.dot(w)>0.5)).sum()/y_test.shape[0]
     #print('RESULT CALCULATED')
     return result
 
 
-def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed,key):
+def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
     """
     Return the matrix of proportion of correct classifications obtained by cross validation from lasso regression.
     """
@@ -35,7 +47,7 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed,key):
     x_train_cleaned,noaf=features_augmentation(x_train_cleaned,not_augm_features=nmc_tr+1)
 
     # Cross validation
-    cost_te=np.zeros((lambdas.size,degrees.size))
+    cost_te=np.zeros(lambdas.size)
     for ind_lamb,lambda_ in enumerate(lambdas):
         print(lambda_)
         if lambda_!=0:

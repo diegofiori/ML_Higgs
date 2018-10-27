@@ -13,7 +13,9 @@ def build_k_indices(y, k_fold, seed):
     return np.array(k_indices)
 
 def logistic_cross_validation(y, phi, k_indices, k, gamma, degree, nmc , interactions, logistic_type, max_iter, threshold):
-    """return the loss of logistic regression."""
+    """
+    Return the loss of logistic regression.
+    """
     """Probabilmente conviene implementare una per la regressione normale, in modo da capire 
     quale sia il grado massimo oltre il quale non ha senso andare e poi lavorare con lambda 
     per capire come eliminare feature"""
@@ -29,8 +31,10 @@ def logistic_cross_validation(y, phi, k_indices, k, gamma, degree, nmc , interac
     tx_test = build_polinomial(x_test, degree, nmc+interactions)
     tx_test = norm_data(tx_train, not_norm_features=nmc, skip_first_col=True)
     
+    initial_w=np.zeros((tx_train.shape[1],1))
+    
     if logistic_type==0:
-        loss , w = logistic_regression_gradient_descent_demo(y_train, tx_train, gamma, max_iter, threshold)
+        w, loss = logistic_regression(y_train, tx_train, initial_w, max_iter, gamma)
     elif logistic_type==1:
         logistic_regression_newton_method_demo(y_train, tx_train)
     elif logistic_type==2:
