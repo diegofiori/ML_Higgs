@@ -27,19 +27,19 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed,key):
     """
     Return the matrix of proportion of correct classifications obtained by cross validation from lasso regression.
     """
-    # split data in k fold
+    # Split data in k fold
     k_indices = build_k_indices(y_train, k_fold, seed)
-    #Clean data
+    # Clean data
     x_train_cleaned,nmc_tr=cleaning_function(x_train,-999)
-    #feature augmentation
+    # Feature augmentation
     x_train_cleaned,noaf=features_augmentation(x_train_cleaned,not_augm_features=nmc_tr+1)
 
-    # cross validation
+    # Cross validation
     cost_te=np.zeros((lambdas.size,degrees.size))
     for ind_lamb,lambda_ in enumerate(lambdas):
         print(lambda_)
         if lambda_!=0:
-            phi_train=build_polinomial(x_train_cleaned,degree,not_poly_features=noaf+nmc_tr+1)
+            phi_train=build_polinomial(x_train_cleaned,degrees,not_poly_features=noaf+nmc_tr+1)
             phi_train=norm_data(x_train_cleaned,not_norm_features=nmc_tr+1)
             loss_te = np.zeros(k_fold)
             for k in range (k_fold):
