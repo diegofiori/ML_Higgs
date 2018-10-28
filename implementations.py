@@ -77,7 +77,7 @@ def lasso_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
-    Returns a model estimated by logistic regression using logistic regression.
+    Returns a model estimated by logistic regression using gradient descent.
     """
     # init parameters
     threshold=1e-8
@@ -94,6 +94,9 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     return w,loss
 
 def reg_logistic_regression(y, tx, lambda_,initial_w, max_iters, gamma):
+    """
+    Returns a model estimated by penalised logistic regression using gradient descent.
+    """
     # init parameters
     threshold = 1e-8
     #losses = []
