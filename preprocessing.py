@@ -1,8 +1,10 @@
 import numpy as np
 
 def nan_converter(x,nm=-999,direction=True):
-    """convert the not measured elements of the matrix in nan, 
-    if direction=False the opposite conversion is made"""
+    """
+    Convert the non-measured elements of the matrix in nan.
+    If direction=False the opposite conversion is made.
+    """
     if direction:
         inds=np.where(x[:,:]==nm)
         x[inds]=np.nan
@@ -13,6 +15,10 @@ def nan_converter(x,nm=-999,direction=True):
 
 
 def find_cluster(x_bool):
+    """
+    Determines cluster with missing values in the same position.
+    Returns their number and the index of their column.
+    """
     v_bool=x_bool.sum(0)
     nb_cluster=0
     index_clusters=[]
@@ -23,6 +29,11 @@ def find_cluster(x_bool):
     return nb_cluster, index_clusters
 
 def cleaning_function(x,nm=-999,add_feat=True):
+    """
+    Replaces missing value with the mean of the column.
+    Creates a dummy variable indicating rows where observations were missing for each cluster of variables with -999 in the same position.
+    Creates an interaction term of the dummies of each cluster.
+    """
     # nm= not_measured
     x_bool=x[:,:]==nm
     nb_cluster,index_clusters=find_cluster(x_bool)
@@ -36,9 +47,11 @@ def cleaning_function(x,nm=-999,add_feat=True):
     return x,nb_cluster
 
 def build_polinomial(x,degree,not_poly_features=0,nm=-999,already_cleaned=True):
-    """create polynomial features until specified degree. It doesn't 
-    compute the power of the last n columns of the metrix, n specified in 
-    not_poly_features"""
+    """
+    Create polynomial features until specified degree. 
+    It doesn't compute the power of the last columns of the matrix, which correspond to non-polynomial features 
+    not_poly_features, i.e. the interaction terms.
+    """
     if not already_cleaned:
         x=nan_converter(x,nm=nm,direction=True)
     phi_list=[np.ones(x.shape[0]).reshape(-1,1)]
@@ -53,6 +66,9 @@ def build_polinomial(x,degree,not_poly_features=0,nm=-999,already_cleaned=True):
     return phi
 
 def norm_data(x,not_norm_features=0,skip_first_col=False):
+    """
+    Performs normalization of the data, subtracting the mean and dividing by the standard deviation of each column.
+    """
     if skip_first_col:
         beg=1
     else:
@@ -65,15 +81,17 @@ def norm_data(x,not_norm_features=0,skip_first_col=False):
     return x
 
 def features_augmentation(relevant_columns,not_augm_features=0):
+    """
+    Performs feature augmentation, creating interaction terms between the features.
+    Returns the number of interactions created and the interaction columns.
+    The dummies denoting missing variables are excluded.
+    """
     num_col=relevant_columns.shape[1]-not_augm_features
     new_col=[]
     for i in range(num_col):
         for j in range(i+1,num_col):
             new_col.append(relevant_columns[:,i]*relevant_columns[:,j])
-            
-    
     new_col=np.array(new_col).transpose()
-    
     if not_augm_features==0:
         new_col=np.concatenate((relevant_columns,new_col),axis=1)
     else:
@@ -84,6 +102,9 @@ def features_augmentation(relevant_columns,not_augm_features=0):
     return new_col,num_col
 
 def norm_max(x):
+    """
+    Performs normalisation of variables by dividing by the maximum absolute value of a column.
+    """
     max_column = (np.abs(x)).max(axis=0)
     x = x / (max_column + np.spacing(0))
     return x
