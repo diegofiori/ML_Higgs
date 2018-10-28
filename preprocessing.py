@@ -83,3 +83,7 @@ def features_augmentation(relevant_columns,not_augm_features=0):
     num_col=new_col.shape[1]-relevant_columns.shape[1]
     return new_col,num_col
 
+def norm_max(x):
+    max_column = (np.abs(x)).max(axis=0)
+    x = x / (max_column + np.spacing(0))
+    return x

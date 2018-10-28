@@ -157,9 +157,9 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     w=w-gamma*grad
     return loss,w
 
-def learning_by_stochastic_gradient_descent(y, tx, initial_w, batch_size, max_iters, gamma):
+def stochastic_gradient_descent_logistic(y, tx, initial_w, batch_size, max_iters, gamma):
     """
-    Do one step of gradient descen using logistic regression.
+    Do gradient descent using logistic regression.
     Return the loss and the updated w.
     """
     w=initial_w
@@ -195,27 +195,22 @@ def learning_by_newton_method(y, tx, w, gamma):
     return loss, w
 
 
-def learning_by_penalized_gradient(y, tx, w, gamma, lambda_):
+def learning_by_penalized_gradient_descent(y, tx, w, gamma, lambda_):
     """
     Do one step of gradient descent, using the penalized logistic regression.
     Return the loss and updated w.
     """
     N = tx.shape[0]
     D = tx.shape[1]
-    y = y.reshape(N,1)
-    # return loss, gradient: TODO
+    
+    # return loss, gradient:
     loss=calculate_loss_logistic(y, tx, w)+0.5*lambda_*np.linalg.norm(w)**2
     grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)+lambda_*w
-    # compute hessian
-    s1=sigmoid(np.dot(tx,w))
-    d = s1 * (1-s1)
-    H = np.zeros((D,D))
-    for n in range(N):
-        c = tx[n,:].reshape(-1,1)
-        H += c.dot(c.T) * d[n]
+   
     # update w
-    w=w-np.linalg.solve(H,gamma*grad)
-    return loss, w
+    w=w-gamma*grad
+    
+    return w,loss
 
 
 def create_csv_submission(ids, y_pred, name):

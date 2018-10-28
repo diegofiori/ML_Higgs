@@ -79,22 +79,32 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
     Returns a model estimated by logistic regression using logistic regression.
     """
-    threshold=1e-8
     # init parameters
+    threshold=1e-8
     losses = []
-    w = np.zeros((tx.shape[1],1))
+    w = initial_w
     # start the logistic regression
     for iter in range(max_iters):
         # get loss and update w.
         loss, w = learning_by_gradient_descent(y.reshape(-1,1), tx, w, gamma)
         # converge criterion
         losses.append(loss)
-        if len(losses) > 1 and np.abs(losses[-1] - losses[-2]) < threshold:
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
             break
     return w,loss
 
 def reg_logistic_regression(y, tx, lambda_,initial_w, max_iters, gamma):
-    
-    
-    
+    # init parameters
+    threshold = 1e-8
+    #losses = []
+    w = initial_w
+    # start the penalized logistic regression
+    for iter in range(max_iters):
+        # get loss and update w.
+        w,loss = learning_by_penalized_gradient_descent(y, tx, w, gamma, lambda_)
+        # converge criterion
+        losses.append(loss)
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
+            #break
+            
     return w,loss
