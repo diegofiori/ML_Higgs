@@ -119,15 +119,12 @@ def sign(x):
     x=1*true_vec1-1*true_vec2
     return x
 
-def compute_stoch_gradient_lasso(y,tx,w,lambda_):
+def compute_gradient_lasso(y,tx,w,lambda_):
     """
-    Returns the stochastic gradient in the lasso model.
+    Returns the gradient in the lasso model.
     """
     err=y-tx.dot(w)
-    if len(y)>1:
-        dL=-tx.transpose().dot(err)/tx.shape[0]+lambda_*sign(w)
-    else:
-        dL=-tx.reshape(-1,1)*err+lambda_*sign(w)
+    dL=-tx.transpose().dot(err)/tx.shape[0]+lambda_*sign(w)
     return dL
 
 

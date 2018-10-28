@@ -62,15 +62,14 @@ def ridge_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma
     return w,loss
 
 
-def lasso_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
+def lasso_regression_GD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
     """
-    Lasso regression using stochastic gradient descent.
+    Lasso regression using gradient descent.
     """
     w=initial_w
     for n_iter in range(max_iters):
-        for mini_y,mini_x in batch_iter(y,tx,batch_size):
-            g=compute_stoch_gradient_lasso(y,tx,w,lambda_)
-            w=w-gamma*g
+        g=compute_gradient_lasso(y,tx,w,lambda_)
+        w=w-gamma*g
     loss=np.linalg.norm(y-tx.dot(w))**2/(2*tx.shape[0])+lambda_*np.absolute(w).sum()
     return w,loss
 

@@ -99,7 +99,7 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
 
 
 def plot_cross_validation(lambdas,cost_te,degrees,regression_type):
-    plt.figure
+    plt.figure()
     string=[]
     for s in range(lambdas.size):
         plt.plot(degrees,cost_te[s])
@@ -115,3 +115,11 @@ def find_the_maximum(matrix):
     max_matrix=np.max(max_col)
     max_row_ind=np.min(np.argmax(matrix[:,max_col_ind]))
     return max_matrix,[max_row_ind,max_col_ind] 
+
+def find_the_maximum_3D(tensor):
+    max_mat=np.max(tensor,axis=0)
+    depth_mat=np.argmax(tensor,axis=0)
+    _,[ind_row,ind_col]=find_the_maximum(max_mat)
+    ind_depth=depth_mat[ind_row,ind_col]
+    max_tensor=np.max(tensor)
+    return max_tensor,[ind_depth,ind_row,ind_col]

@@ -15,7 +15,7 @@ def build_k_indices(y, k_fold, seed):
                  for k in range(k_fold)]
     return np.array(k_indices)
 
-def cross_validation_lasso(y, phi, k_indices, k, lambda_, not_poly_features):
+def cross_validation_lasso(y, phi, k_indices, k, lambda_, gamma, max_iters, not_poly_features):
     """
     Computes one step of cross validation with lasso regression and returns the fraction of correct classifications.
     """
@@ -28,14 +28,14 @@ def cross_validation_lasso(y, phi, k_indices, k, lambda_, not_poly_features):
     #print(tx_test.shape)
     #print(tx_train.shape)
     #print(y_train.shape)
-    w, loss = lasso_regression_SGD(y_train, x_train, lambda_, np.zeros(x_train.shape[1]), 1, 100, gamma=1e-7)
+    w, loss = lasso_regression_GD(y_train, x_train, lambda_, np.zeros(x_train.shape[1]), max_iters, gamma)
     # Calculate results
     result=(y_test==(x_test.dot(w)>0.5)).sum()/y_test.shape[0]
     #print('RESULT CALCULATED')
     return result
 
 
-def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
+def cross_validation_lasso_demo(y_train,x_train,degrees,k_fold,lambdas,gamma,max_iters,seed):
     """
     Return the matrix of proportion of correct classifications obtained by cross validation from lasso regression.
     """
@@ -47,16 +47,18 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
     x_train_cleaned,noaf=features_augmentation(x_train_cleaned,not_augm_features=nmc_tr+1)
 
     # Cross validation
-    cost_te=np.zeros(lambdas.size)
-    for ind_lamb,lambda_ in enumerate(lambdas):
-        print(lambda_)
-        if lambda_!=0:
-            phi_train=build_polinomial(x_train_cleaned,degrees,not_poly_features=noaf+nmc_tr+1)
-            phi_train=norm_data(x_train_cleaned,not_norm_features=nmc_tr+1)
-            loss_te = np.zeros(k_fold)
-            for k in range (k_fold):
-                result = cross_validation_lasso(y_train, phi_train, k_indices, k , lambda_, nmc_tr+1+noaf)
-                loss_te[k]= result
+    cost_te=np.zeros((gammas.size,lambdas.size,degrees.size))
+    for ind_gam,gamma in enumerate(gammas):
+        print(gamma)
+        for ind_lamb,lambda_ in enumerate(lambdas):
+            if lambda_!=0:
+                for ind_deg,degree in enumerate(degrees):
+                    phi_train=build_polinomial(x_train_cleaned,degree,not_poly_features=noaf+nmc_tr+1)
+                    phi_train=norm_data(x_train_cleaned,not_norm_features=nmc_tr+1)
+                    loss_te = np.zeros(k_fold)
+                    for k in range (k_fold):
+                        result = cross_validation_lasso(y_train, phi_train, k_indices, k , lambda_, gamma, max_iters, nmc_tr+1+noaf)
+                        loss_te[k]= result
 
-            cost_te[ind_lamb]=loss_te.mean()
+                    cost_te[ind_gam,ind_lamb,ind_deg]=loss_te.mean()
     return cost_te
