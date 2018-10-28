@@ -98,7 +98,7 @@ def reg_logistic_regression(y, tx, lambda_,initial_w, max_iters, gamma):
     """
     # init parameters
     threshold = 1e-8
-    #losses = []
+    losses = []
     w = initial_w
     # start the penalized logistic regression
     for iter in range(max_iters):
@@ -107,6 +107,6 @@ def reg_logistic_regression(y, tx, lambda_,initial_w, max_iters, gamma):
         # converge criterion
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
-            #break
+            break
             
     return w,loss
