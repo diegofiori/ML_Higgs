@@ -4,6 +4,12 @@ from regression_tools import *
 def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     """
     Linear regression using gradient descent.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+                    initial_w, initial approximation of the vector of coefficients of the model
+                    max_iters, maximum number of iterations of gradient descent method
+                    gamma, learning parameter
+    Returns: estimated coefficients and the loss of the model.
     """
     w = initial_w
     for n_iter in range(max_iters):
@@ -16,6 +22,12 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
 def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     """
     Linear regression using stochastic gradient descent.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+                    initial_w, initial approximation of the vector of coefficients of the model
+                    max_iters, maximum number of iterations of gradient descent method
+                    gamma, learning parameter
+    Returns: estimated coefficients and loss of the model.
     """
     batch_size=1
     w=initial_w
@@ -30,6 +42,9 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
 def least_squares(y, tx):
     """
     Least squares regression using normal equations.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+    Returns: estimated coefficients and loss of the model.    
     """
     w=np.linalg.solve(np.matmul(tx.transpose(),tx),tx.transpose().dot(y))
     loss=compute_loss(y,tx,w)
@@ -39,6 +54,10 @@ def least_squares(y, tx):
 def ridge_regression(y, tx, lambda_):
     """
     Ridge regression using normal equations.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+                    lambda_, regularising parameter
+    Returns: estimated coefficients and loss of the model.
     """
     n=len(y)
     I=np.diag(np.ones(tx.shape[1]))
@@ -52,6 +71,14 @@ def ridge_regression(y, tx, lambda_):
 def ridge_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma):
     """
     Ridge regression using stochastic gradient descent.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+                    lambda_, regularising parameter
+                    initial_w, initial approximation of the vector of coefficients of the model
+                    batch_size, size of the subsample used for the gradient descent
+                    max_iters, maximum number of iterations of gradient descent
+                    gamma, learning parameter in the gradient descent
+    Returns: estimated coefficients and loss of the model.
     """
     w=initial_w
     for n_iter in range(max_iters):
@@ -65,6 +92,13 @@ def ridge_regression_SGD(y, tx, lambda_, initial_w, batch_size, max_iters, gamma
 def lasso_regression_GD(y, tx, lambda_, initial_w, max_iters, gamma):
     """
     Lasso regression using gradient descent.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+                    lambda_, regularising parameter
+                    initial_w, initial approximation of the vector of coefficients of the model
+                    max_iters, maximum number of iterations of gradient descent
+                    gamma, learning parameter in the gradient descent
+    Returns: estimated coefficients and loss of the model.
     """
     w=initial_w
     for n_iter in range(max_iters):
@@ -76,7 +110,14 @@ def lasso_regression_GD(y, tx, lambda_, initial_w, max_iters, gamma):
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """
-    Returns a model estimated by logistic regression using logistic regression.
+    Returns a model estimated by logistic regression gradient descent.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+                    initial_w, initial approximation of the vector of coefficients of the model
+                    batch_size, size of the subsample used for the gradient descent
+                    max_iters, maximum number of iterations of gradient descent
+                    gamma, learning parameter in the gradient descent
+    Returns: estimated coefficients and loss of the model.
     """
     # init parameters
     threshold=1e-8
@@ -93,6 +134,16 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
     return w,loss
 
 def reg_logistic_regression(y, tx, lambda_,initial_w, max_iters, gamma):
+    """
+    Returns a model estimated by regularised logistic regression gradient descent.
+    Takes as input: y, the objective variable (batch)
+                    tx, input data (batch)
+                    initial_w, initial approximation of the vector of coefficients of the model
+                    batch_size, size of the subsample used for the gradient descent
+                    max_iters, maximum number of iterations of gradient descent
+                    gamma, learning parameter in the gradient descent
+    Returns: estimated coefficients and loss of the model.
+    """
     # init parameters
     threshold = 1e-8
     losses = []
