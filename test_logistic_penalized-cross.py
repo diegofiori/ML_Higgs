@@ -15,10 +15,7 @@ degrees=np.arange(3,15)
 lambdas = np.logspace(-8,-3,15)
 k_fold = 4
 
-cross_validation_logistic_demo(y_train,x_train,degrees,k_fold,lambdas,seed,2, max_iter=1000, threshold=1e-8)
-
 # Cross Validation to find best degree and lambda
-mean_nb_err_te = cross_validation_logistic_demo_prova(y_train,x_train_cleaned,degrees,k_fold,lambdas,seed,2,noaf,nmc_tr)
-
+mean_nb_err_te = cross_validation_logistic_demo(y_train,x_train,degrees,k_fold,lambdas,seed,2, max_iter=1000, threshold=1e-8)
 
 #ONCE FOUND THE BEST LAMBDA AND DEGREE, PUT THEM INTO TEST_LOGISTIC_PENALIZED
