@@ -163,7 +163,7 @@ def calculate_loss_logistic(y, tx, w):
                     w, coefficients of the model
     Returns: negative log-likelihood of the logit.
     """
-    return -sum(y*(np.dot(tx,w))-np.log(1+np.exp(np.dot(tx,w))))
+    return -np.sum(y*(np.dot(tx,w))-np.log(1+np.exp(np.dot(tx,w))))
 
 
 def learning_by_gradient_descent(y, tx, w, gamma):
@@ -267,7 +267,7 @@ def AIC(w,l):
 
 ### Subsample Extraction
 
-def retrieve_subset(y, x, num_obs, set_seed=1):
+def retrieve_subset(y, x, num_obs, seed_set=1):
     """
     Extracts a subset of the data to speed up model estimation.
     Takes as input: y, the objective variable
@@ -277,7 +277,7 @@ def retrieve_subset(y, x, num_obs, set_seed=1):
     Returns: subsample of objective variable y and of model matrix x
     """
     # Select randomly a subset
-    np.random.seed(set_seed)
+    np.random.seed(seed_set)
     tot_observation = x.shape[0]
     idx = np.random.randint(tot_observation, size=num_obs)
     x_small = x[idx,:]
