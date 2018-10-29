@@ -157,3 +157,27 @@ def reg_logistic_regression(y, tx, lambda_,initial_w, max_iters, gamma):
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
             break
     return w,loss
+
+
+def logistic_regression_newton_method_demo(y, tx, max_iter, threshold, gamma):
+    """
+    Performs logistic regression using Newton method to find the coefficients w of the model.
+    Takes as input: y, objective variable
+                    tx, input data
+                    max_iter, maximum number of iterations of Newton method
+                    threshold, stopping criterion based on two consecutive losses
+                    gamma, learning parameter
+    Returns the loss and the updated w.
+    """
+    # init parameters
+    losses = []
+    w = np.zeros((tx.shape[1],1))
+    # start the logistic regression
+    for iter in range(max_iter):
+        # get loss and update w.
+        loss, w = learning_by_newton_method(y.reshape(-1,1), tx, w, gamma)
+        # converge criterion
+        losses.append(loss)
+        if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
+            break
+    return w,loss
