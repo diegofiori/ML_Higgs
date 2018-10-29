@@ -13,7 +13,7 @@ def build_k_indices(y, k_fold, seed):
                  for k in range(k_fold)]
     return np.array(k_indices)
 
-def logistic_cross_validation(y, phi, k_indices, k, lambda_, degree, nmc , interactions, logistic_type, max_iter, threshold):
+def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , interactions, logistic_type, max_iter, threshold):
     """
     Return the loss of logistic regression.
     """
@@ -27,19 +27,21 @@ def logistic_cross_validation(y, phi, k_indices, k, lambda_, degree, nmc , inter
     initial_w=np.zeros((x_train.shape[1],1))
     
     if logistic_type==0:
-        w, loss = logistic_regression(y_train, x_train, initial_w, max_iter, gamma)
+        # In this case the parameter is GAMMA
+        w, loss = logistic_regression(y_train, x_train, initial_w, max_iter, param_)
     elif logistic_type==1:
         w, loss = logistic_regression_newton_method_demo(y_train, x_train)
     elif logistic_type==2:
+        # In this case the parameter is LAMBDA
         initial_w = 5 * np.ones(x_train.shape[1])
         gamma = 1e-5
-        w , loss = reg_logistic_regression(y_train, x_train,lambda_,initial_w,max_iter,gamma)
+        w , loss = reg_logistic_regression(y_train, x_train,param_,initial_w,max_iter,gamma)
     #elif logistic_type==3
         
     result=(y_test==(sigmoid(x_test.dot(w))>0.5)).sum()/y_test.shape[0]
     return result
 
-def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,lambdas,seed,logistic_type, max_iter=1000, threshold=1e-8):
+def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,parameters,seed,logistic_type, max_iter=1000, threshold=1e-8):
     """
     Performs cross validation.
     logistic_type:
@@ -56,11 +58,11 @@ def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,lambdas,
     x_train_cleaned,noaf=features_augmentation(x_train_cleaned,not_augm_features=nmc_tr+1)
 
     # Matrix to store the mean result (over k quantities) at each step
-    mean_nb_err_te=np.zeros((lambdas.size,degrees.size))
+    mean_nb_err_te=np.zeros((parameters.size,degrees.size))
     
-    for ind_lamb,lambda_ in enumerate(lambdas):
-        #print('LAMBDA IS')
-        #print(lambda_)
+    for ind_param,param_ in enumerate(parameters):
+        #print('PARAMETER IS')
+        #print(param_)
         for ind_deg, degree_ in enumerate(degrees):
             #print('DEGREE IS: ')
             #print(degree_)
@@ -86,11 +88,11 @@ def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,lambdas,
                 
             for k in range (k_fold):
                 # Retrieve the loss
-                result = logistic_cross_validation(y_train, phi_train, k_indices, k , lambda_, degree_, nmc_tr+1,noaf,logistic_type,max_iter, threshold)
+                result = logistic_cross_validation(y_train, phi_train, k_indices, k , param_, degree_, nmc_tr+1,noaf,logistic_type,max_iter, threshold)
                 
                 #Store the result
                 nb_err_te[k]= result
 
-            mean_nb_err_te[ind_lamb,ind_deg]=nb_err_te.mean()
+            mean_nb_err_te[ind_param,ind_deg]=nb_err_te.mean()
     
     return mean_nb_err_te
