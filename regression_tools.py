@@ -182,7 +182,7 @@ def learning_by_gradient_descent(y, tx, w, gamma):
     grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)
     # update w
     w=w-gamma*grad
-    return loss,w
+    return w,loss
 
 def stochastic_gradient_descent_logistic(y, tx, initial_w, batch_size, max_iters, gamma):
     """
@@ -202,7 +202,7 @@ def stochastic_gradient_descent_logistic(y, tx, initial_w, batch_size, max_iters
             g=np.transpose(mini_x)*sigmoid(np.dot(mini_x,w)-mini_y)
             w=w-gamma*g
     loss=calculate_loss_logistic(y, tx, w)
-    return loss, w
+    return w,loss
             
     
 def learning_by_newton_method(y, tx, w, gamma):
@@ -230,7 +230,7 @@ def learning_by_newton_method(y, tx, w, gamma):
         H += c.dot(c.T) * d[n]
     # update w
     w=w-np.linalg.solve(H,gamma*grad)
-    return loss, w
+    return w,loss
 
 
 def learning_by_penalized_gradient_descent(y, tx, w, gamma, lambda_):
