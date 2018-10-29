@@ -36,7 +36,7 @@ phi_train = norm_max(phi_train)
 #y_train , phi_train = retrieve_subset(y_train,phi_train,int(phi_train.shape[0]/250), seed)
 
 # Initialize variables
-initial_w = -5 * np.ones(phi_train.shape[1])
+initial_w = 5 * np.ones(phi_train.shape[1])
 losses = []
 
 # Calculate the optimal w and loss

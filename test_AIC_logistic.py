@@ -3,6 +3,7 @@ from load_data import load_data
 from preprocessing import *
 from cross_validation_ridge import *
 from regression_tools import *
+from AIC import *
 
 # Read the data and set parameters
 x_train,y_train,x_test,ids_test=load_data('train.csv','test.csv')
