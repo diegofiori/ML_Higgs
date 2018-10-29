@@ -24,7 +24,7 @@ def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , intera
     y_test = y[k_indices[k]]
     y_train = y[train_indices]
     
-    initial_w=np.zeros((x_train.shape[1],1))
+    initial_w=np.zeros(x_train.shape[1],)
     
     if logistic_type==0:
         # In this case the parameter is GAMMA
