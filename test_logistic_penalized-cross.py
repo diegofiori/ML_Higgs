@@ -1,13 +1,10 @@
 import numpy as np
 from load_data import load_data
-from preprocessing import *
-from regression_tools import *
-from implementations import *
 from cross_validation_logistic import *
 
 # Read the data and set parameters
 x_train,y_train,x_test,ids_test=load_data('train.csv','test.csv')
-seed = 3
+seed = 5
 
 #Set parameters values
 max_iters = 1000
