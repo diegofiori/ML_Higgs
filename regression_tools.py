@@ -119,12 +119,15 @@ def sign(x):
     x=1*true_vec1-1*true_vec2
     return x
 
-def compute_gradient_lasso(y,tx,w,lambda_):
+def compute_stoch_gradient_lasso(y,tx,w,lambda_):
     """
-    Returns the gradient in the lasso model.
+    Returns the stochastic gradient in the lasso model.
     """
     err=y-tx.dot(w)
-    dL=-tx.transpose().dot(err)/tx.shape[0]+lambda_*sign(w)
+    if len(y)>1:
+        dL=-tx.transpose().dot(err)/tx.shape[0]+lambda_*sign(w)
+    else:
+        dL=-tx.reshape(-1,1)*err+lambda_*sign(w)
     return dL
 
 
@@ -263,7 +266,7 @@ def logistic_regression_newton_method_demo(y, tx, max_iter, threshold,gamma):
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
             break
-    return loss,w
+    return w,loss
 
               
 def AIC(w,l):
