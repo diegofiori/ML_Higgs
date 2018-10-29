@@ -49,7 +49,7 @@ for i in range(y_test.shape[0]):
         y_pred.append(1)
     else:
         y_pred.append(-1)
-        #b=-1
+       
         
 create_csv_submission(ids_test, y_pred, 'submission_log_gd.csv')
 
