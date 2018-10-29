@@ -267,7 +267,7 @@ def AIC(w,l):
 
 ### Subsample Extraction
 
-def retrieve_subset(y, x, num_obs, seed_set=1):
+def retrieve_subset(y, x, num_obs, set_seed=1):
     """
     Extracts a subset of the data to speed up model estimation.
     Takes as input: y, the objective variable
