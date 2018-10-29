@@ -32,9 +32,6 @@ phi_train=norm_data(phi_train,not_norm_features=nmc_tr+1,skip_first_col=True)
 # Normalize with the maximum value
 phi_train = norm_max(phi_train)
 
-# Select randomly a subset (TO TEST)
-#y_train , phi_train = retrieve_subset(y_train,phi_train,int(phi_train.shape[0]/250), seed)
-
 # Initialize variables
 initial_w = 5 * np.ones(phi_train.shape[1])
 losses = []
