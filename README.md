@@ -10,6 +10,7 @@ ii) the Machine Learning algorithms being applied.<br />
 
 # (1) Preprocessing 
 
+### "load_data.py" <br />
 ### "preprocessing.py" <br />
 Contains the functions used to clean the data. Specifically:<br />
 -how to deal with missing values;<br />
@@ -56,6 +57,8 @@ Cross validation is used to set the values of hyperparameters and polynomial deg
 -"cross_validaion_logistic.py"<br />
 -"cross_validation_lasso.py"<br />
 -"cross_validation_ridge.py"<br />
+-"cross_validation_ridge_super.py"<br />
+
 
 
 
