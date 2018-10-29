@@ -175,7 +175,7 @@ def logistic_regression_newton_method_demo(y, tx, max_iter, threshold, gamma):
     # start the logistic regression
     for iter in range(max_iter):
         # get loss and update w.
-        loss, w = learning_by_newton_method(y.reshape(-1,1), tx, w, gamma)
+        w, loss = learning_by_newton_method(y.reshape(-1,1), tx, w, gamma)
         # converge criterion
         losses.append(loss)
         if len(losses) > 1 and np.abs(losses[-1] - losses[-2])/np.abs(losses[-1]) < threshold:
