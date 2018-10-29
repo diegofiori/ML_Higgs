@@ -131,6 +131,50 @@ def features_augmentation(relevant_columns, not_augm_features=0):
     num_col=new_col.shape[1]-relevant_columns.shape[1]
     return new_col, num_col
 
+def super_features_augmentation(x,y,lambda_=0,not_super_features=0,is_train=True,augmentation=True,skip_first_column=False):
+    '''
+    Create new features computing the log if all elements of a column are different of zero, 
+    otherwise it computes the square root of the column elementwise.  If augmentation=True 
+    it multiplies each new column with the others. Finally it performs model selection based on
+    AIC.
+    '''
+    if skip_first_column: 
+        d=1
+    else:
+        d=0
+    x_to_augm=x[:,d:x.shape[1]-not_super_features]
+    column_added=0
+    temp=(np.min(np.absolute(x_to_augm),axis=0))[:]!=0
+    is_not_zero=np.where(temp)[0]
+    log_col=np.log(np.absolute(x_to_augm[:,is_not_zero]))
+    is_zero=np.where(1- 1*temp)[0]
+    rad_col=np.sqrt(np.absolute(x_to_augm[:,is_zero]))
+    if rad_col.shape[1]>0 and log_col.shape[1]>0:
+        rad_log_col=np.concatenate((rad_col,log_col),axis=1)
+    elif rad_col.shape[1]>0:
+        rad_log_col=rad_col
+    else :
+        rad_log_col=log_col
+    if augmentation:
+        rad_log_col=features_augmentation(rad_log_col)
+    if is_train:
+        important_col=compare_aic_ridge(y_train,rad_log_col,lambda_)
+    else:
+        important_col=y
+    rad_log_col=rad_log_col[:,important_col]
+    if d>0 and not_super_features>0:
+        x=np.concatenate((x[:,:d],x_to_augm,rad_log_col,x[:,(x.shape[1]-not_super_features):]),axis=1)
+    elif d>0:
+        x=np.concatenate((x[:,:d],x_to_augm,rad_log_col),axis=1)
+    elif not_super_features>0:
+        x=np.concatenate((x_to_augm,rad_log_col,x[:,(x.shape[1]-not_super_features):]),axis=1)
+    else:
+        x=np.concatenate((x_to_augm,rad_log_col),axis=1)
+    return x, important_col
+        
+        
+    
+
 def norm_max(x):
     """
     Performs normalisation of variables by dividing by the maximum absolute value of a column.
