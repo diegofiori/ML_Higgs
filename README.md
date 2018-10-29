@@ -3,9 +3,9 @@
 ### Group: Diego Fiori, Paolo Colusso, Valerio Volpe
 ### Kaggle team name: LaVolpeilFioreEilColosso
 
-The files are organised based on:
-i) the process followed to implement the models,
-ii) the Machine Learning algorithms being applied.
+The files are organised based on:<br />
+i) the process followed to implement the models,<br />
+ii) the Machine Learning algorithms being applied.<br />
 
 # (1) Preprocessing 
 
