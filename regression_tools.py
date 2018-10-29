@@ -277,7 +277,7 @@ def retrieve_subset(y, x, num_obs, set_seed=1):
     Returns: subsample of objective variable y and of model matrix x
     """
     # Select randomly a subset
-    np.random.seed(seed_set)
+    np.random.seed(set_seed)
     tot_observation = x.shape[0]
     idx = np.random.randint(tot_observation, size=num_obs)
     x_small = x[idx,:]
