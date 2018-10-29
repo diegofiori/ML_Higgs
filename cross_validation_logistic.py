@@ -35,7 +35,7 @@ def logistic_cross_validation(y, phi, k_indices, k, lambda_, degree, nmc , inter
         gamma = 1e-5
         w , loss = reg_logistic_regression(y_train, x_train,lambda_,initial_w,max_iter,gamma)
     #elif logistic_type==3
-        
+    w = w.reshape(-1,)
     result=(y_test==(sigmoid(x_test.dot(w))>0.5)).sum()/y_test.shape[0]
     return result
 
