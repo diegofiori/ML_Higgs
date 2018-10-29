@@ -10,7 +10,7 @@ ii) the Machine Learning algorithms being applied.
 # (1) Preprocessing 
 
 ##"preprocessing.py"
-Contains the functions used to clean the data. Specifically:\\
+Contains the functions used to clean the data. Specifically:<br />
 -how to deal with missing values;
 -creation of dummy variables;
 -feature augmentation with interaction terms and polynomials;
