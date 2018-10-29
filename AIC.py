@@ -11,7 +11,7 @@ def compare_aic_gradient_descent(y,tx,gamma,max_iter,threshold):
         loss.fill(np.inf)
         aic=np.zeros(dimx)  #contains aic for all models with m variables
         aic.fill(np.inf)
-        w=np.zeros(dimx)
+        w=np.zeros(ind+1)
         for m in variables:
             temp=models.copy()
             temp.append(m)
