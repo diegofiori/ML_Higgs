@@ -126,7 +126,6 @@ def features_augmentation(relevant_columns, not_augm_features=0):
     if not_augm_features==0:
         new_col=np.concatenate((relevant_columns,new_col),axis=1)
     else:
-        #print(new_col.shape,relevant_columns.shape)
         new_col=np.concatenate((relevant_columns[:,0:num_col],new_col,
                                 relevant_columns[:,num_col:]),axis=1)
     num_col=new_col.shape[1]-relevant_columns.shape[1]
