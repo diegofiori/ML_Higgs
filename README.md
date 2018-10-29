@@ -1,5 +1,6 @@
 # ML_Higgs
 
+### Machine Learning CS-433: Project 1
 ### Group: Diego Fiori, Paolo Colusso, Valerio Volpe
 ### Kaggle team name: LaVolpeilFioreEilColosso
 
@@ -22,7 +23,7 @@ Contains the functions used to clean the data. Specifically:<br />
 
 ### "regression_tools.py" <br />
 Contains the generic functions used throughout the implementation of algorithms. Specifically:<br />
--auxiliary functions for regression implementations;<br />
+-auxiliary functions for regression implementations: <br />
 -single steps of regression algorithms;<br />
 -extraction of a sample of the dataset;<br />
 -batch creation.<br />
@@ -51,7 +52,7 @@ Contains the implementations of the main machine learning algorithms we selected
 
 
 # (4) Cross Validations
-Cross validation is used to set the values of hyperparameters and polynomial degrees in different regression models. The files which implement cross-validation are:
+Cross validation is used to set the values of hyperparameters and polynomial degrees in different regression models. The files which implement cross-validation are: <br />
 -"cross_validaion_logistic.py"<br />
 -"cross_validation_lasso.py"<br />
 -"cross_validation_ridge.py"<br />
@@ -65,5 +66,5 @@ Cross validation is used to set the values of hyperparameters and polynomial deg
 -"test_AIC_logistic"<br />
 
 
-
+A few functions, such as batch_iter, were taken from the helpers of the lab session of the course.
 
