@@ -55,7 +55,7 @@ x_test_cleaned,noaf=features_augmentation(x_test_cleaned,not_augm_features=nmc_t
 #noaf = 0
 
 # Build the polinomial to test
-phi_test=build_polinomial(x_test_cleaned,degree=best_degree,not_poly_features=noaf+nmc_te+1,nm=-999,already_cleaned=True)
+phi_test=build_polinomial(x_test_cleaned,degree=degree,not_poly_features=noaf+nmc_te+1,nm=-999,already_cleaned=True)
 
 # Normalize the data
 phi_test=norm_data(phi_test,not_norm_features=nmc_te+1,skip_first_col=True)
