@@ -29,7 +29,7 @@ def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , intera
     if logistic_type==0:
         # In this case the parameter is GAMMA
         w, loss = logistic_regression(y_train, x_train, initial_w, max_iter, param_)
-    elif logistic_type==1:
+    elif logistic_type==1: #mettere sgd
         w, loss = logistic_regression_newton_method_demo(y_train, x_train, max_iter, threshold, gamma)
     elif logistic_type==2:
         # In this case the parameter is LAMBDA
@@ -46,9 +46,8 @@ def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,paramete
     Performs cross validation.
     logistic_type:
         0: gradient descent
-        1: Netwon
+        1: stochastic gradient descent
         2: penalised gradient descent
-        3: stochastic gradient descent
     """
     
     # Clean data 
