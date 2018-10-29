@@ -19,7 +19,7 @@ x_train_cleaned,nmc_tr=cleaning_function(x_train,-999)
 
 # Features augmentation
 x_train_cleaned,noaf=features_augmentation(x_train_cleaned,not_augm_features=nmc_tr+1)
-''' if you want to test, comment the previous line 
+''' if you want to test, comment the previous line and 
     set noaf = 0'''
 #noaf = 0
 
@@ -64,7 +64,7 @@ phi_test=norm_data(phi_test,not_norm_features=nmc_te+1,skip_first_col=True)
 phi_test = norm_max(phi_test)
 
 # Calculate the prediction
-y_test=sigmoid(x_test_cleaned.dot(w))>0.5
+y_test=sigmoid(phi_test.dot(w))>0.5
 y_pred=[]
 for i in range(y_test.shape[0]):
     if y_test[i]>0.5:
