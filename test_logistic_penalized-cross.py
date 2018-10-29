@@ -7,7 +7,7 @@ from cross_validation_logistic import *
 
 # Read the data and set parameters
 x_train,y_train,x_test,ids_test=load_data('train.csv','test.csv')
-seed = 1
+seed = 3
 
 #Set parameters values
 max_iters = 1000

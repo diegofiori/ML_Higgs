@@ -18,12 +18,14 @@ def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , intera
     Return the loss of logistic regression.   ########USATO NON TOCCARE
     """
     
+    # Create the test and train samples
     train_indices = np.delete(k_indices , k , 0).reshape((k_indices.shape[0]-1) * k_indices.shape[1])
     x_test = phi[k_indices[k],:]
     x_train = phi[train_indices,:]
     y_test = y[k_indices[k]]
     y_train = y[train_indices]
     
+    # Create the initial solution
     initial_w=np.zeros(x_train.shape[1],)
     
     if logistic_type==0:
@@ -37,6 +39,7 @@ def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , intera
         gamma = 1e-5
         w , loss = reg_logistic_regression(y_train, x_train,param_,initial_w,max_iter,gamma)
     
+    # Calculate the result
     w = w.reshape(-1,)
     result=(y_test==(sigmoid(x_test.dot(w))>0.5)).sum()/y_test.shape[0]
     return result

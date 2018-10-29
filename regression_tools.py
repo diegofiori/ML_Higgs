@@ -202,7 +202,7 @@ def learning_by_newton_method(y, tx, w, gamma):
     """
     N = tx.shape[0]
     D = tx.shape[1]
-    y = y.reshape(N,1)
+    y = y.reshape(-1,)
     # compute loss
     loss=calculate_loss_logistic(y, tx, w)
     # compute gradient
@@ -229,8 +229,6 @@ def learning_by_penalized_gradient_descent(y, tx, w, gamma, lambda_):
                     lambda_, regularising parameter
     Returns the loss and the updated w.
     """
-    N = tx.shape[0]
-    D = tx.shape[1]
     # return loss, gradient:
     loss=calculate_loss_logistic(y, tx, w)+0.5*lambda_*np.linalg.norm(w)**2
     grad=np.transpose(tx).dot(sigmoid(np.dot(tx,w))-y)+lambda_*w
