@@ -12,7 +12,7 @@ x_train,y_train,x_test,ids_test=load_data('train.csv','test.csv')
 degrees=np.arange(1,12)
 k_fold=4
 gammas=np.logspace(-10,-7,5)
-seed=1
+seed=3
 logistic_type=0
 
 # Cross validation to find best gamma and best degree
