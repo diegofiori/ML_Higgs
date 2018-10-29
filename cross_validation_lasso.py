@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from regression_tools import * 
 from preprocessing import *
+from implementations import *
 
 def build_k_indices(y, k_fold, seed):
     """
@@ -35,7 +36,7 @@ def cross_validation_lasso(y, phi, k_indices, k, lambda_, gamma, max_iters, not_
     return result
 
 
-def cross_validation_lasso_demo(y_train,x_train,degrees,k_fold,lambdas,gamma,max_iters,seed):
+def cross_validation_lasso_demo(y_train,x_train,degrees,k_fold,lambdas,gammas,max_iters,seed):
     """
     Return the matrix of proportion of correct classifications obtained by cross validation from lasso regression.
     """
