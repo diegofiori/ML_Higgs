@@ -3,20 +3,6 @@ import csv
 
 ### Generic tools
 
-def build_poly(x, degree):
-    """
-    Polynomial basis functions for input data x, for j=0 up to j=degree.
-    Takes as input: x, input data
-                    degree, maximum degree to which variables are raised.
-    Returns: phi, model matrix with polynomial features.
-    """
-    phi_list=[]
-    for i in range(degree+1):
-        phi_list.append(x**i)
-    phi=np.array(phi_list).transpose()
-    return phi
-
-
 def batch_iter(y, tx, batch_size, num_batches=1, shuffle=True):
     """
     Generate a minibatch iterator for a dataset.

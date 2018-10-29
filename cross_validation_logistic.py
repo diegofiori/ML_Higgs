@@ -3,7 +3,7 @@ from regression_tools import *
 from preprocessing import *
 from implementations import *
 
-def build_k_indices(y, k_fold, seed):
+def build_k_indices(y, k_fold, seed): ########USATO NON TOCCARE
     """build k indices for k-fold."""
     num_row = y.shape[0]
     interval = int(num_row / k_fold)
@@ -15,7 +15,7 @@ def build_k_indices(y, k_fold, seed):
 
 def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , interactions, logistic_type, max_iter, threshold):
     """
-    Return the loss of logistic regression.
+    Return the loss of logistic regression.   ########USATO NON TOCCARE
     """
     
     train_indices = np.delete(k_indices , k , 0).reshape((k_indices.shape[0]-1) * k_indices.shape[1])
@@ -29,14 +29,14 @@ def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , intera
     if logistic_type==0:
         # In this case the parameter is GAMMA
         w, loss = logistic_regression(y_train, x_train, initial_w, max_iter, param_)
-    elif logistic_type==1: #mettere sgd
-        w, loss = logistic_regression_newton_method_demo(y_train, x_train, max_iter, threshold, gamma)
+    #elif logistic_type==1: #mettere sgd SE LO METTIAMO RISCRIVERE IL COMMENTO
+    #    w, loss = logistic_regression_newton_method_demo(y_train, x_train, max_iter, threshold, gamma)
     elif logistic_type==2:
         # In this case the parameter is LAMBDA
         initial_w = 5 * np.ones(x_train.shape[1])
         gamma = 1e-5
         w , loss = reg_logistic_regression(y_train, x_train,param_,initial_w,max_iter,gamma)
-    #elif logistic_type==3
+    
     w = w.reshape(-1,)
     result=(y_test==(sigmoid(x_test.dot(w))>0.5)).sum()/y_test.shape[0]
     return result
@@ -45,8 +45,7 @@ def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,paramete
     """
     Performs cross validation.
     logistic_type:
-        0: gradient descent
-        1: stochastic gradient descent
+        0: gradient descent                       ########USATO NON TOCCARE
         2: penalised gradient descent
     """
     
@@ -60,11 +59,7 @@ def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,paramete
     mean_nb_err_te=np.zeros((parameters.size,degrees.size))
     
     for ind_param,param_ in enumerate(parameters):
-        #print('PARAMETER IS')
-        #print(param_)
         for ind_deg, degree_ in enumerate(degrees):
-            #print('DEGREE IS: ')
-            #print(degree_)
             # Vector to store the result for each k-fold
             nb_err_te = np.zeros(k_fold) 
             
@@ -79,8 +74,8 @@ def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,paramete
                 
             y_train = y_train_input
             
-            # Select pseudo-randomly a subset (TO TEST)
-            y_train, phi_train = retrieve_subset(y_train,phi_train,int(phi_train.shape[0]/250), seed)
+            # Select pseudo-randomly a subset
+            y_train, phi_train = retrieve_subset(y_train,phi_train,int(phi_train.shape[0]/25), seed)
             
             # split data in k fold
             k_indices = build_k_indices(y_train, k_fold, seed)
