@@ -60,11 +60,13 @@ Cross validation is used to set the values of hyperparameters and polynomial deg
 
 
 # (5) Estimate models and cross validate
+The following files run algorithms implementing different machine learning algorithms from the data loading phase to the final csv creation.<br />
 -"test_lasso.py"<br />
--"test_logistic_gd.py"<br />
 -"test_logistic_penalized.py"<br />
--"test_AIC_logistic"<br />
-
+-"test_logistic_penalized-cross.py"<br />
+-"test_logistic_newton.py"<br />
+-"test_logistic_gd.py"<br />
+-"test_AIC_logistic.py"<br />
 
 A few functions, such as batch_iter, were taken from the helpers of the lab session of the course.
 
