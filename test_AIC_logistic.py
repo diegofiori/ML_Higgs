@@ -36,7 +36,7 @@ max_iter=100
 threshold=1e-5
 model_feature = compare_aic_gradient_descent(y_train, phi_train,gamma,max_iter,threshold)
 
-initial_w=np.zeros(((phi_train[:,model_feature]),shape[1],1))
+initial_w=np.zeros(((phi_train[:,model_feature]),shape[1],))
 w,_ = logistic_regression(y_train, phi_train[:,model_feature], initial_w, gamma=1e-5, max_iters=100)
 
 # ONLY TO TEST LOCALLY
