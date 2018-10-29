@@ -72,6 +72,9 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
 
 
 def plot_cross_validation(lambdas,cost_te,degrees,regression_type):
+    '''
+    Save a figure which contains the cross validation plots. 
+    '''
     plt.figure()
     string=[]
     for s in range(lambdas.size):
@@ -83,6 +86,10 @@ def plot_cross_validation(lambdas,cost_te,degrees,regression_type):
     plt.savefig('cross_validation '+regression_type+'.png')
     
 def find_the_maximum(matrix):
+    ''' 
+    Return the maximum of a matrix and its indices. 
+    In case of multiple maximums it returns the position of the one with maximum column index
+    '''
     max_col=np.max(matrix,axis=0)
     max_col_ind=np.max(np.argmax(max_col))
     max_matrix=np.max(max_col)
@@ -90,6 +97,9 @@ def find_the_maximum(matrix):
     return max_matrix,[max_row_ind,max_col_ind] 
 
 def find_the_maximum_3D(tensor):
+    ''' 
+    Return the maximum of a 3D tensor with the maximum position indices. 
+    '''
     max_mat=np.max(tensor,axis=0)
     depth_mat=np.argmax(tensor,axis=0)
     _,[ind_row,ind_col]=find_the_maximum(max_mat)
