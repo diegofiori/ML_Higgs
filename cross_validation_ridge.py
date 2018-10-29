@@ -19,10 +19,7 @@ def cross_validation_ridge(y, phi, k_indices, k, lambda_, degree, not_poly_featu
     """
     Return the proportion of correct classifications of ridge/linear regression in a step of k-fold cross-validation.
     """
-    #Probabilmente conviene implementare una per la regressione normale, in modo da capire 
-    #quale sia il grado massimo oltre il quale non ha senso andare e poi lavorare con lambda 
-    #per capire come eliminare feature
-    
+ 
     # Get k'th subgroup in test, others in train    
     train_indices = np.delete(k_indices , k , 0).reshape((k_indices.shape[0]-1) * k_indices.shape[1])
     x_test = phi[k_indices[k],:]
@@ -33,35 +30,16 @@ def cross_validation_ridge(y, phi, k_indices, k, lambda_, degree, not_poly_featu
     # Form data with polynomial degree
     tx_train = build_polinomial(x_train, degree, not_poly_features)
     tx_test = build_polinomial(x_test, degree, not_poly_features)
-    #print(tx_test.shape)
-    #print(tx_train.shape)
-    #print(y_train.shape)
 
     # Ridge regression / Linear regression
-    #if tx_train.shape[1]<50:
     if lambda_!=0:
         w, loss = ridge_regression(y_train, tx_train, lambda_)
     else:
         w, loss = least_squares(y_train,tx_train)
-            
-    #else: 
-        # forse è meglio implementarle all'esterno della funzione
-        #initial_w=np.ones((tx_train.shape[1]))
-        #batch_size=1
-        #max_iters=100
-        #gamma=0.01
-        #if lambda_!=0:
-        #    loss , w = ridge_regression_SGD(y_train, tx_train, lambda_,initial_w, batch_size, max_iters, gamma)
-        #else:
-        #    loss , w = least_squares_SGD(y_train,tx_train,initial_w, batch_size, max_iters, gamma)
-
-    #print('REGRESSION DONE')
-    #print(y_test.shape)
-    #print(w.shape)
     
     # Calculate proportion of correct classification for given lambda and degree
     result=(y_test==(tx_test.dot(w)>0.5)).sum()/y_test.shape[0]
-    #print('RESULT CALCULATED')
+ 
     return result
 
 def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
@@ -81,16 +59,11 @@ def cross_validation_demo(y_train,x_train,degrees,k_fold,lambdas,seed):
     # Cross validation steps
     cost_te=np.zeros((lambdas.size,degrees.size))
     for ind_lamb,lambda_ in enumerate(lambdas):
-        print(lambda_)
         if lambda_!=0:
             x_train_cleaned=norm_data(x_train_cleaned,not_norm_features=noaf+nmc_tr+1)
         for ind_deg, degree_ in enumerate(degrees):
-            #print('DEGREE IS: ')
-            #print(degree_)
             loss_te = np.zeros(k_fold)
             for k in range (k_fold):
-                #print('K CONSIDERED IS: ')
-                #print(k)
                 result = cross_validation_ridge(y_train, x_train_cleaned, k_indices, k , lambda_, degree_, nmc_tr+1+noaf)
                 loss_te[k]= result
 
