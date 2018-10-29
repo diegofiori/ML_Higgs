@@ -6,7 +6,7 @@ from implementations import *
 
 # Read the data and set parameters
 x_train,y_train,x_test,ids_test=load_data('train.csv','test.csv')
-seed = 1
+seed = 3
 
 #Set parameters values
 lambda_ = 1e-5
@@ -19,7 +19,7 @@ x_train_cleaned,nmc_tr=cleaning_function(x_train,-999)
 
 # Features augmentation
 x_train_cleaned,noaf=features_augmentation(x_train_cleaned,not_augm_features=nmc_tr+1)
-''' if you want to test, comment the previous line and 
+''' To test quickly, comment the previous line and 
     set noaf = 0'''
 #noaf = 0
 
@@ -50,7 +50,7 @@ x_test_cleaned,nmc_te=cleaning_function(x_test,-999)
 
 # Features augmentation
 x_test_cleaned,noaf=features_augmentation(x_test_cleaned,not_augm_features=nmc_te+1)
-''' if you want to test, comment the previous line 
+''' To test quickly, comment the previous line and 
     set noaf = 0'''
 #noaf = 0
 

@@ -3,7 +3,7 @@ from regression_tools import *
 from preprocessing import *
 from implementations import *
 
-def build_k_indices(y, k_fold, seed): ########USATO NON TOCCARE
+def build_k_indices(y, k_fold, seed):
     """build k indices for k-fold."""
     num_row = y.shape[0]
     interval = int(num_row / k_fold)
@@ -15,28 +15,29 @@ def build_k_indices(y, k_fold, seed): ########USATO NON TOCCARE
 
 def logistic_cross_validation(y, phi, k_indices, k, param_, degree, nmc , interactions, logistic_type, max_iter, threshold):
     """
-    Return the loss of logistic regression.   ########USATO NON TOCCARE
+    Return the loss of logistic regression.
     """
     
+    # Create the test and train samples
     train_indices = np.delete(k_indices , k , 0).reshape((k_indices.shape[0]-1) * k_indices.shape[1])
     x_test = phi[k_indices[k],:]
     x_train = phi[train_indices,:]
     y_test = y[k_indices[k]]
     y_train = y[train_indices]
     
+    # Create the initial solution
     initial_w=np.zeros(x_train.shape[1],)
     
     if logistic_type==0:
         # In this case the parameter is GAMMA
         w, loss = logistic_regression(y_train, x_train, initial_w, max_iter, param_)
-    #elif logistic_type==1: #mettere sgd SE LO METTIAMO RISCRIVERE IL COMMENTO
-    #    w, loss = logistic_regression_newton_method_demo(y_train, x_train, max_iter, threshold, gamma)
     elif logistic_type==2:
         # In this case the parameter is LAMBDA
         initial_w = 5 * np.ones(x_train.shape[1])
         gamma = 1e-5
         w , loss = reg_logistic_regression(y_train, x_train,param_,initial_w,max_iter,gamma)
     
+    # Calculate the result
     w = w.reshape(-1,)
     result=(y_test==(sigmoid(x_test.dot(w))>0.5)).sum()/y_test.shape[0]
     return result
@@ -45,7 +46,7 @@ def cross_validation_logistic_demo(y_train_input,x_train,degrees,k_fold,paramete
     """
     Performs cross validation.
     logistic_type:
-        0: gradient descent                       ########USATO NON TOCCARE
+        0: gradient descent                     
         2: penalised gradient descent
     """
     
