@@ -36,8 +36,8 @@ max_iter=100
 threshold=1e-5
 model_feature = compare_aic_gradient_descent(y_train, phi_train,gamma,max_iter,threshold)
 
-
-_,w = logistic_regression_gradient_descent_demo(y_train, phi_train[:,model_feature], gamma=1e-5, max_iter=100, threshold=1e-5)
+initial_w=np.zeros(((phi_train[:,model_feature]),shape[1]),1)
+w,_ = logistic_regression(y_train, phi_train[:,model_feature], initial_w, gamma=1e-5, max_iter=100)
 
 # ONLY TO TEST LOCALLY
 #result=(y_train==(sigmoid(phi_train[:,model_feature].dot(w))>0.5)).sum()/y_train.shape[0]

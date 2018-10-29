@@ -15,7 +15,7 @@ def compare_aic_gradient_descent(y,tx,gamma,max_iter,threshold):
         for m in variables:
             temp=models.copy()
             temp.append(m)
-            [loss[m],w]=logistic_regression(y, tx[:,temp], initial_w, max_iter, gamma)
+            [loss[m],w]=logistic_regression(y, tx[:,temp], w, max_iter, gamma)
             aic[m] = AIC(w,loss[m])
 
         b=np.argmin(loss)
